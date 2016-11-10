@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>动画图片轮播</title>
+<script type="text/javascript">
+//成员变量
+var t;
+function init(){
+var img_container=document.getElementsByClassName("swipe-div")[0],
+    nodes=img_container.childNodes,
+	img=nodes[1],
+	time=2000,
+	imgNum=0;
+for(var i=0;i<nodes.length;i++){
+if(nodes[i].nodeName!="#text"){
+imgNum++;//---3
+}
+}
+var img_width=img.width;//600
+var totalWidth=img_width*imgNum;//3x600=1800 获得图片的总宽度
+step=(img_width-20)/time;
+img_container.style.width=totalWidth+"px";
+//img_container.style.left="-"+img_width*2+"px";
+/*setTimeout(function(){
+img_container.style.left-="-"+20+"px";
+},1000);*/
+var loop=function(){
+moveAndZSImg(img_container,time,step);
+}
+t=setInterval(loop,time);
+
+img_container.onmouseover=function(){
+clearInterval(t);
+}
+img_container.onmouseout=function(){
+t=setInterval(loop,time);
+}
+}
+
+function moveAndZSImg(node,time,step){
+var left=0;
+for(var i=0;i<time;i++){
+setTimeout(function(){
+node.style.left="-"+left+"px";
+left=left+step;
+},i);
+}
+setTimeout(function(){
+var newImg=document.createElement("IMG"),oldImg=node.getElementsByTagName("IMG")[0];
+newImg.src=oldImg.src;
+node.removeChild(oldImg);
+node.appendChild(newImg);
+node.style.left="20px";
+},time);
+}
+window.onload=init;
+</script>
+<style type="text/css">
+.container{
+width:600px;
+height:320px;
+position:relative;
+overflow:hidden;
+border:10px solid #eee;
+border-radius:10px;
+-moz-border-radius:10px;
+-webkit-border-radius:10px;
+}
+.swipe-div{
+width:600px;
+height:300px;
+overflow:hidden;
+position:absolute;
+}
+.swipe-div img{
+width:600px;
+height:300px;
+float:left;
+}
+.number_div{
+position:relative;
+top:300px;
+background-color:#eee;
+text-align:center;
+
+}
+.number_div span{
+background:#000;
+font-size:20px;
+color:#fff;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="swipe-div">
+<img src="test-img/1.jpg"></img>
+<img src="test-img/2.jpg"></img>
+<img src="test-img/3.jpg"></img>
+</div>
+<div class="number_div">
+<span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+</div>
+</div>
+</body>
+</html>
